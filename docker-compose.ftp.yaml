@@ -1,36 +1,27 @@
 #ddev-generated
 
-# https://github.com/stilliard/docker-pure-ftpd
+# https://github.com/delfer/docker-alpine-ftp-server
 
 services:
   ftp:
     container_name: ddev-${DDEV_SITENAME}-ftp
-
-    image: stilliard/pure-ftpd
+    image: delfer/alpine-ftp-server
     restart: "no"
     expose:
       - 21
-      - 30000-30100
+      - 21000-21010
     labels:
       com.ddev.site-name: ${DDEV_SITENAME}
       com.ddev.approot: $DDEV_APPROOT
     environment:
-      - FTP_USER_NAME=ftp
-      - FTP_USER_PASS=ftp
-      - FTP_USER_HOME=/ftp-home
-      - FTP_PASSIVE_PORTS=30000:30100
-      - PUBLICHOST=ftp
+      - USERS=ftpuser|ftPassw0rd
+      - MIN_PORT=21000
+      - MAX_PORT=21010
+      - ADDRESS=ftp
     volumes:
-      - type: bind
-# lokles ftp Zielverzeichnis anpassen:
-        source: ./ftp/data
-        target: /ftp-home
-        consistency: cached
-#      - type: bind
-#        source: ./ftp/ftp-users
-#        target: /home/ftpusers
-#        consistency: cached
-#      - type: bind
-#        source: ./ftp/ftp-passwd
-#        target: /etc/pure-ftpd/passwd
-#        consistency: cached
+      - ./ftp/data:/ftp/ftpuser
+      - ftp:/ftp/ftp
+
+volumes:
+  ftp:
+    name: "${DDEV_SITENAME}-ftp"
