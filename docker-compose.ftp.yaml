@@ -1,0 +1,36 @@
+#ddev-generated
+
+# https://github.com/stilliard/docker-pure-ftpd
+
+services:
+  ftp:
+    container_name: ddev-${DDEV_SITENAME}-ftp
+
+    image: stilliard/pure-ftpd
+    restart: "no"
+    expose:
+      - 21
+      - 30000-30100
+    labels:
+      com.ddev.site-name: ${DDEV_SITENAME}
+      com.ddev.approot: $DDEV_APPROOT
+    environment:
+      - FTP_USER_NAME=ftp
+      - FTP_USER_PASS=ftp
+      - FTP_USER_HOME=/ftp-home
+      - FTP_PASSIVE_PORTS=30000:30100
+      - PUBLICHOST=ftp
+    volumes:
+      - type: bind
+# lokles ftp Zielverzeichnis anpassen:
+        source: ./ftp/data
+        target: /ftp-home
+        consistency: cached
+#      - type: bind
+#        source: ./ftp/ftp-users
+#        target: /home/ftpusers
+#        consistency: cached
+#      - type: bind
+#        source: ./ftp/ftp-passwd
+#        target: /etc/pure-ftpd/passwd
+#        consistency: cached
